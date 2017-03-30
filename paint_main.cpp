@@ -79,7 +79,7 @@ void init()
 	colfunc[2] = 0;
 	glClearColor(0.f, 0.f, 0.f, 0.f);
 	glColor3f(1.f, 1.f, 1.f);
-	
+
 
 
 }
@@ -162,108 +162,6 @@ void geomCoordSys(GLfloat size)
 }
 
 
-
-
-
-void geomQuad(GLfloat size, GLenum face, GLenum mode)
-{
-	size = size / 2.f;
-
-	glPolygonMode(face, mode);
-
-	glBegin(GL_TRIANGLES);
-	glVertex3f(-size, -size, 0.f);
-	glVertex3f(size, -size, 0.f);
-	glVertex3f(size, size, 0.f);
-	glEnd();
-
-	glBegin(GL_TRIANGLES);
-	glVertex3f(-size, -size, 0.f);
-	glVertex3f(size, size, 0.f);
-	glVertex3f(-size, size, 0.f);
-	glEnd();
-}
-
-void geomCube(GLfloat size, GLenum face, GLenum mode)
-{
-	//frontal face
-	glPushMatrix();
-	glTranslatef(0.f, 0.f, size / 2.);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-	//BACK face
-
-	glPushMatrix();
-	//glTransl
-	glRotatef(180, 1.f, 0.f, 0.f);
-	glTranslatef(0.f, 0.f, size / 2);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(90, 1.f, 0.f, 0.f);
-	glTranslatef(0.f, 0.f, size / 2);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(-90, 1.f, 0.f, 0.f);
-	glTranslatef(0.f, 0.f, size / 2);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(90, 0.f, 1.f, 0.f);
-	glTranslatef(0.f, 0.f, size / 2);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-
-	glPushMatrix();
-	glRotatef(-90, 0.f, 1.f, 0.f);
-	glTranslatef(0.f, 0.f, size / 2);
-	geomQuad(size, face, mode);
-	glPopMatrix();
-
-}
-
-void caja(GLfloat a, GLfloat b, GLfloat c, GLenum face, GLenum mode) {
-	glScalef(a, b, c);
-	geomCube(1.f, face, mode);
-	glScalef(1 / a, 1 / b, 1 / c);
-}
-
-void piramide(GLfloat x, GLfloat y, GLfloat z, GLenum face, GLenum mode) {
-	glScalef(x, y, z);
-	glPushMatrix();
-	glTranslatef(0.f, -.5f, .0f);
-	glPushMatrix();
-	glRotatef(90, 1.f, 0.f, 0.f);
-	geomQuad(1, face, mode);
-	glPopMatrix();
-	glBegin(GL_TRIANGLES);//frente
-	glVertex3f(-0.5f, 0.f, 0.5f);
-	glVertex3f(0.5f, 0.f, 0.5f);
-	glVertex3f(0.f, 1.0f, 0.f);
-	glEnd();
-	glBegin(GL_TRIANGLES);//derecha
-	glVertex3f(0.5f, 0.f, 0.5f);
-	glVertex3f(0.5f, 0.f, -0.5f);
-	glVertex3f(0.f, 1.0f, 0.f);
-	glEnd();
-	glBegin(GL_TRIANGLES);//atras
-	glVertex3f(0.5f, 0.f, -0.5f);
-	glVertex3f(-0.5f, 0.f, -0.5f);
-	glVertex3f(0.f, 1.0f, 0.f);
-	glEnd();
-	glBegin(GL_TRIANGLES);//izquierda
-	glVertex3f(-0.5f, 0.f, -0.5f);
-	glVertex3f(-0.5f, 0.f, 0.5f);
-	glVertex3f(0.f, 1.0f, 0.f);
-	glEnd();
-	glPopMatrix();
-	glScalef(x / 2, y / 2, z / 2);
-}
-
 void mainDisplay(GLint num) {
 
 	GLenum face = GL_FRONT_AND_BACK; //GL_FRONT_AND_BACK;
@@ -272,7 +170,7 @@ void mainDisplay(GLint num) {
 	TriangleGL *tri = new TriangleGL();
 	CylinderGL *cyli = new CylinderGL();
 	ConeGL *cone = new ConeGL();
-	ConeGL *disk = new ConeGL();
+	DiskGL *disk = new DiskGL();
 	LineGL *line = new LineGL();
 	QuadGL *quad = new QuadGL();
 	SphereGL *sphere = new SphereGL();
@@ -290,8 +188,8 @@ void mainDisplay(GLint num) {
 		scene.push_back(sphere);
 		break;
 	case 3:
-		box->frontFaceMode = face;
-		box->backFaceMode = mode;
+		//box->frontFaceMode = face;
+		//box->backFaceMode = mode;
 		scene.push_back(box);
 		break;
 	case 4:
@@ -325,8 +223,8 @@ void mainDisplay(GLint num) {
 		scene.push_back(tea);
 		break;
 	case 10:
-		cyli->frontFaceMode = face;
-		cyli->backFaceMode = mode;
+		//cyli->frontFaceMode = face;
+		//cyli->backFaceMode = mode;
 		scene.push_back(cyli);
 		break;
 	case 11:
@@ -340,28 +238,16 @@ void mainDisplay(GLint num) {
 		scene.push_back(cone);
 		break;
 	case 13:
-		//Caja
-		break;
-	case 14:
-		//Punto
-		break;
-	case 15:
-		line->frontFaceMode = face;
-		line->backFaceMode = mode;
-		scene.push_back(line);
-		break;
-	case 16:
 		tri->frontFaceMode = face;
 		tri->backFaceMode = mode;
 		scene.push_back(tri);
 		break;
-	case 17:
+	case 15:
 		quad->frontFaceMode = face;
 		quad->backFaceMode = mode;
 		scene.push_back(quad);
 		break;
-	case 18:
-		
+	case 17:
 		scene.push_back(piram);
 		break;
 	default:
@@ -390,7 +276,7 @@ void display(GLint num) {
 	TriangleGL *tri = new TriangleGL();
 	CylinderGL *cyli = new CylinderGL();
 	ConeGL *cone = new ConeGL();
-	ConeGL *disk = new ConeGL();
+	DiskGL *disk = new DiskGL();
 	LineGL *line = new LineGL();
 	QuadGL *quad = new QuadGL();
 	SphereGL *sphere = new SphereGL();
@@ -400,6 +286,7 @@ void display(GLint num) {
 	DodecahedronGL *dode = new DodecahedronGL();
 	IcosahedronGL *ico = new IcosahedronGL();
 	TeapotGL *tea = new TeapotGL();
+	PiramidedGL *piram = new PiramidedGL();
 
 	switch (num) {
 	case 2:
@@ -468,30 +355,20 @@ void display(GLint num) {
 		cone->render();
 		break;
 	case 13:
-		//Caja
-		break;
-	case 14:
-		//Punto
-		break;
-	case 15:
-		line->frontFaceMode = face;
-		line->backFaceMode = mode;
-		line->render();
-		break;
-	case 16:
 		tri->frontFaceMode = face;
 		tri->backFaceMode = mode;
 		tri->scale(2.f, 2.f, 2.f);
 		tri->render();
 		break;
-	case 17:
+	case 15:
 		quad->frontFaceMode = face;
 		quad->backFaceMode = mode;
 		quad->scale(2.f, 2.f, 2.f);
 		quad->render();
 		break;
-	case 18:
-		piramide(1, 2, 2, face, mode);
+	case 17:
+		piram->scale(2.f, 2.f, 2.f);
+		piram->render();
 		break;
 	default:
 		break;
@@ -539,7 +416,7 @@ void render()
 	int i = 0;
 	for (list<ObjectGL *>::iterator it = scene.begin(); it != scene.end(); it++, i++)
 	{
-		if (i == n - 1){
+		if (i == n - 1) {
 			(*it)->setColor(colfunc[0], colfunc[1], colfunc[2]);
 		}
 		else
@@ -559,7 +436,7 @@ void render()
 
 
 #define PI 3.14159265
-void moveobj(int x, int y){
+void moveobj(int x, int y) {
 	float xa = (-(x - (width / 2)) / (1350 / zoomZ));
 	float ya = ((y - (height / 2)) / (1350 / zoomZ));
 	float za = 0;
@@ -596,27 +473,27 @@ void moveobj(int x, int y){
 	i = 0;
 	for (list<float>::iterator it = scenepointx.begin(); i < n && it != scenepointx.end(); it++, i++)
 	{
-		if (i == n - 1){
+		if (i == n - 1) {
 			(*it) = xx;
 		}
 	}
 	i = 0;
 	for (list<float>::iterator it = scenepointy.begin(); i < n && it != scenepointy.end(); it++, i++)
 	{
-		if (i == n - 1){
+		if (i == n - 1) {
 			(*it) = yy;
 		}
 	}
 	i = 0;
 	for (list<float>::iterator it = scenepointz.begin(); i < n && it != scenepointz.end(); it++, i++)
 	{
-		if (i == n - 1){
+		if (i == n - 1) {
 			(*it) = zz;
 		}
 	}
 }
 
-void scaleobj(int x, int y){
+void scaleobj(int x, int y) {
 	float xa = (-(x - (width / 2)) / (1350 / zoomZ));
 	float ya = ((y - (height / 2)) / (1350 / zoomZ));
 	float za = 0;
@@ -628,14 +505,14 @@ void scaleobj(int x, int y){
 		a = (*it);
 	}
 	float dx, dy, dz;
-	if (line){
+	if (line) {
 		xx = ((xa)*(cos(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((ya)*(cos(rotay * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		yy = ((ya)*(cos(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		zz = ((za)*(cos(rotax * PI / 180.0))*(cos(rotay * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotay * PI / 180.0))) + (-(ya)*(sin(rotax * PI / 180.0))*(cos(rotay * PI / 180.0)));
 
 		line = FALSE;
 	}
-	else{
+	else {
 		xx2 = ((xa)*(cos(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((ya)*(cos(rotay * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		yy2 = ((ya)*(cos(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		zz2 = ((za)*(cos(rotax * PI / 180.0))*(cos(rotay * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotay * PI / 180.0))) + (-(ya)*(sin(rotax * PI / 180.0))*(cos(rotay * PI / 180.0)));
@@ -650,7 +527,7 @@ void scaleobj(int x, int y){
 }
 
 
-void rotarobj(int x, int y){
+void rotarobj(int x, int y) {
 	ObjectGL *a = scene.front();
 	int n = obj;
 	int i = 0;
@@ -663,18 +540,18 @@ void rotarobj(int x, int y){
 	a->rotate(y * 3, 0, 1, 0);
 }
 
-void paintline(int x, int y){
+void paintline(int x, int y) {
 	float xa = (-(x - (width / 2)) / (1350 / zoomZ));
 	float ya = ((y - (height / 2)) / (1350 / zoomZ));
 	float za = 0;
-	if (line){
+	if (line) {
 		xx = ((xa)*(cos(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((ya)*(cos(rotay * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		yy = ((ya)*(cos(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		zz = ((za)*(cos(rotax * PI / 180.0))*(cos(rotay * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotay * PI / 180.0))) + (-(ya)*(sin(rotax * PI / 180.0))*(cos(rotay * PI / 180.0)));
 
 		line = FALSE;
 	}
-	else{
+	else {
 		xx2 = ((xa)*(cos(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((ya)*(cos(rotay * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotay * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		yy2 = ((ya)*(cos(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotaz * PI / 180.0))) + ((za)*(sin(rotax * PI / 180.0))*(cos(rotaz * PI / 180.0)));
 		zz2 = ((za)*(cos(rotax * PI / 180.0))*(cos(rotay * PI / 180.0))) + ((xa)*(cos(rotax * PI / 180.0))*(sin(rotay * PI / 180.0))) + (-(ya)*(sin(rotax * PI / 180.0))*(cos(rotay * PI / 180.0)));
@@ -691,7 +568,7 @@ void paintline(int x, int y){
 	}
 }
 
-void paintpoint(int x, int y){
+void paintpoint(int x, int y) {
 	float xa = (-(x - (width / 2)) / (1350 / zoomZ));
 	float ya = ((y - (height / 2)) / (1350 / zoomZ));
 	float za = 0;
@@ -706,14 +583,14 @@ void paintpoint(int x, int y){
 	scenepointx.push_back(0);
 	scenepointy.push_back(0);
 	scenepointz.push_back(0);
-	
+
 }
 
-void keyboard(unsigned char key, int x, int y){
+void keyboard(unsigned char key, int x, int y) {
 	if (key == '+')
 	{
 		obj++;
-		if (scene.size()<obj){
+		if (scene.size()<obj) {
 			obj = 1;
 		}
 	}
@@ -723,7 +600,7 @@ void keyboard(unsigned char key, int x, int y){
 		{
 			obj--;
 		}
-		else{
+		else {
 			obj = scene.size();
 		}
 	}
@@ -792,7 +669,7 @@ void keyboard(unsigned char key, int x, int y){
 	glutPostRedisplay();
 	cout << " " << endl;
 }
-void specialkeyboard(int key, int x, int y){
+void specialkeyboard(int key, int x, int y) {
 	if (key == 100) //left
 	{
 		cout << "KEY= " << key << endl;
@@ -835,22 +712,22 @@ void mouse(int button, int state, int x, int y)
 		mouseRotate = true;
 		xAux = rotX;
 		yAux = rotY;
-		if (paint){
+		if (paint) {
 
 		}
-		else{
+		else {
 
 		}
 
 	}
 	else if (button == GLUT_RIGHT_BUTTON)
 	{
-		if (state == GLUT_DOWN){
+		if (state == GLUT_DOWN) {
 			if (dibujaline)
 			{
 				paintline(x, y);
 			}
-			if (dibujapunto){
+			if (dibujapunto) {
 				paintpoint(x, y);
 				cout << "Puntos" << x << endl;
 			}
@@ -860,7 +737,7 @@ void mouse(int button, int state, int x, int y)
 		//SCALEOBJ
 		if (escalar)
 		{
-			if (state == GLUT_DOWN){
+			if (state == GLUT_DOWN) {
 				//paintline(x,y);
 
 				float xa = (-(x - (width / 2)) / (1350 / zoomZ));
@@ -890,7 +767,7 @@ void mouse(int button, int state, int x, int y)
 
 void mouseMotion(int x, int y)
 {
-	if (mouseButton == GLUT_RIGHT_BUTTON){
+	if (mouseButton == GLUT_RIGHT_BUTTON) {
 		if (transladar)
 		{
 			moveobj(x, y);
